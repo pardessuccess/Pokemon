@@ -81,6 +81,7 @@ import com.sillazy.pokemon.toastText
 import com.sillazy.pokemon.ui.theme.Typography
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -90,6 +91,16 @@ fun FightScreen(
     upPress: () -> Unit
 ) {
     val context = LocalContext.current
+    var first by remember { mutableStateOf(false) }
+
+    var level by remember {
+        mutableStateOf(10)
+    }
+
+    if (!first) {
+        level = Random.nextInt(5, 50)
+    }
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -100,13 +111,13 @@ fun FightScreen(
 
             var hpStatus by remember { mutableIntStateOf(1) }
             val name = viewModel.pokemon.value?.name?.let { setCapitalize(it) } ?: ""
-
             hpStatus = viewModel.pokemon.value!!.stats[0].base_stat
 
             var numberSkill by remember { mutableIntStateOf(0) }
+            first = true
 
             FieldSection(
-                level = viewModel.level,
+                level = { level },
                 name = name,
                 context = context,
                 viewModel = viewModel,
@@ -258,7 +269,7 @@ suspend fun operateSkill(
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun FieldSection(
-    level: Int,
+    level: () -> Int,
     name: String,
     context: Context,
     viewModel: DetailViewModel,
@@ -305,7 +316,7 @@ fun FieldSection(
     var skillProvoke by remember { mutableStateOf(false) }
 
     if (hpStatus() <= 0) {
-        Toast.makeText(context, "You kill $name", Toast.LENGTH_SHORT).show()
+        toastText(context, "You kill $name")
         upPress()
     }
     LaunchedEffect(numberSkill()) {
@@ -363,7 +374,7 @@ fun FieldSection(
             HpStats(
                 name,
                 viewModel.hp.value!!,
-                { level },
+                { level() },
                 { hpStatus() })
         }
         Box(
@@ -572,6 +583,9 @@ fun HpStats(name: String, maxHp: Int, level: () -> Int, hpStatus: () -> Int) {
                 modifier = Modifier.width(80.dp),
                 maxLines = 1
             )
+            Spacer(
+                modifier = Modifier.weight(1f).padding(end = 3.dp)
+            )
             Image(
                 painter =
                 if (level() % 2 == 0) {
@@ -583,9 +597,6 @@ fun HpStats(name: String, maxHp: Int, level: () -> Int, hpStatus: () -> Int) {
                 modifier = Modifier
                     .size(15.dp)
                     .padding(start = 3.dp)
-            )
-            Spacer(
-                modifier = Modifier.weight(1f)
             )
             Text(text = "Lv${level()}", fontWeight = FontWeight.SemiBold)
         }

@@ -33,6 +33,7 @@ class DetailViewModel @Inject constructor(
         level = Random.nextInt(1, 50)
     }
 
+
     private var _pokemon = MutableLiveData(PokemonDto())
     val pokemon: LiveData<PokemonDto> = _pokemon
 

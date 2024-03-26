@@ -16,10 +16,8 @@ import kotlin.text.StringBuilder
 
 fun getImageUrl(pokemon: Int): String =
     "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon}.png"
-
 fun getGifUrl(pokemon: String) =
-    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon}.png"
-
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokemon}.gif"
 // 그림에서 대표 색 추출
 
 fun calcDominantColor(drawable: Drawable, onFinish: (Color) -> Unit) {

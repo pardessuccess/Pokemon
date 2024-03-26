@@ -69,6 +69,7 @@ import com.sillazy.pokemon.parseTypeToColor
 import com.sillazy.pokemon.presentation.component.PokemonBottomBar
 import com.sillazy.pokemon.presentation.navgraph.Screen
 import com.sillazy.pokemon.setCapitalize
+import com.sillazy.pokemon.toastText
 import com.sillazy.pokemon.ui.theme.Typography
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -356,6 +357,7 @@ fun IndicatorSection(
         }
     }
 }
+
 @Composable
 fun CustomDialog(pokemon: Pocket, setShowDialog: (Boolean) -> Unit, viewModel: PocketViewModel) {
     val context = LocalContext.current
@@ -366,11 +368,10 @@ fun CustomDialog(pokemon: Pocket, setShowDialog: (Boolean) -> Unit, viewModel: P
                 onClick = {
                     setShowDialog(false)
                     viewModel.releasePocket(pokemon)
-                    Toast.makeText(
+                    toastText(
                         context,
                         "${setCapitalize(pokemon.name)} is free !!!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    )
                 }
             ) {
                 Text("Release")
